@@ -1,0 +1,15 @@
+{
+	"name": "kirbi-slack",
+	"version": "0.0.1",
+	"description": "adds Slack support to Kirbi",
+	"author": "Nate Richardson <hello@naterichardson.com> (https://naterichardson.com)",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Richardson-Media-House/kirbi-slack.git"
+	},
+	"license": "Apache-2.0",
+	"dependencies": {
+		"@slack/client": "^3.11.0"
+ 	},
+ 	"main": "slackSupport.js"
+}
