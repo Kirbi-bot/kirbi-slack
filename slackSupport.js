@@ -18,7 +18,7 @@ exports.slackLogin = function () {
 	} else {
         console.log(chalk.red('ERROR: Kirbi must have a Slack bot token...'));
         return;
-	}
+	};
 
 	//Load external slack-specific modules
 	if (Kirbi.Config.slack.modules.length && Kirbi.Config.slack.modules instanceof Array) {
