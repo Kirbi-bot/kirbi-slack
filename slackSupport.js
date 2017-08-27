@@ -6,7 +6,11 @@ exports.slackLogin = function () {
 	console.log(chalk.magenta(`Slack Enabled... Starting.`));
 	if (Kirbi.Auth.slack.bot_token) {
 		console.log('Logging in to Slack...');
-        Kirbi.Slack = new RtmClient(Kirbi.Auth.slack.bot_token);
+		let MemoryDataStore = require('@slack/client').MemoryDataStore;
+        Kirbi.Slack = new RtmClient(Kirbi.Auth.slack.bot_token, {
+			logLevel: 'error',
+			dataStore: new MemoryDataStore()
+		});
 		Kirbi.Slack.c_events = require('@slack/client').CLIENT_EVENTS;
 		Kirbi.Slack.rtm_events = require('@slack/client').RTM_EVENTS;
         Kirbi.Slack.start();
@@ -40,7 +44,7 @@ exports.slackLogin = function () {
 			}
 		});
 	}
-	
+
 	var commandCount = Object.keys(Kirbi.Commands).length + Object.keys(Kirbi.slackCommands).length;
 	console.log(`Loaded ${commandCount} Slack chat commands`);
 }
