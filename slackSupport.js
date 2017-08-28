@@ -1,8 +1,9 @@
-const Kirbi = require('../../kirbi');
 const chalk = require('chalk');
 
-exports.slackLogin = function () {
-    const RtmClient = require('@slack/client').RtmClient;
+exports.slackLogin = function (Kirbi) {
+	const RtmClient = require('@slack/client').RtmClient;
+	let commandCount = Object.keys(Kirbi.Commands).length;
+
 	console.log(chalk.magenta(`Slack Enabled... Starting.`));
 	if (Kirbi.Auth.slack.bot_token) {
 		console.log('Logging in to Slack...');
@@ -14,7 +15,7 @@ exports.slackLogin = function () {
 		Kirbi.Slack.c_events = require('@slack/client').CLIENT_EVENTS;
 		Kirbi.Slack.rtm_events = require('@slack/client').RTM_EVENTS;
         Kirbi.Slack.start();
-		require('./lib/onEvent');
+		require('./lib/onEvent')(Kirbi);
 	} else {
         console.log(chalk.red('ERROR: Kirbi must have a Slack bot token...'));
         return;
@@ -26,9 +27,9 @@ exports.slackLogin = function () {
 		Kirbi.Config.slack.modules.forEach(module => {
 			if (Kirbi.slackCommands[module]) {return};
 			try {
-				module = require(`kirbi-slack-${module}`);
+				module = require(`kirbi-slack-${module}`)(Kirbi);
 			} catch (err) {
-				Kirbi.logError(`Improper setup of the 'slack-${module}' command file. : ${err}`);
+				console.log(chalk.red(`Improper setup of the 'slack-${module}' command file. : ${err}`));
 				return;
 			}
 			if (module && module['commands']) {
@@ -43,8 +44,8 @@ exports.slackLogin = function () {
 				});
 			}
 		});
+		commandCount += Object.keys(Kirbi.slackCommands).length;
 	}
 
-	var commandCount = Object.keys(Kirbi.Commands).length + Object.keys(Kirbi.slackCommands).length;
 	console.log(`Loaded ${commandCount} Slack chat commands`);
-}
+};
