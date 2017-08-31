@@ -15,7 +15,7 @@ exports.slackLogin = function (Kirbi) {
 		Kirbi.Slack.c_events = require('@slack/client').CLIENT_EVENTS;
 		Kirbi.Slack.rtm_events = require('@slack/client').RTM_EVENTS;
 		Kirbi.Slack.start();
-		require('./lib/onEvent')(Kirbi);
+		require('./lib/on-event')(Kirbi);
 	} else {
 		console.log(chalk.red('ERROR: Kirbi must have a Slack bot token...'));
 		return;

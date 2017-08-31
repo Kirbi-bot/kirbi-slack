@@ -13,7 +13,7 @@
     "Matt Carroll <admin@develogix.com> (https://develogix.com)",
     "Joseph Moran III <joseph.moraniii@gmail.com> (https://josephmoran.co)"
   ],
-  "main": "slackSupport.js",
+  "main": "slack-support.js",
   "dependencies": {
     "@slack/client": "^3.11.0",
     "chalk": "^2.1.0",
