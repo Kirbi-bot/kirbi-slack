@@ -7,32 +7,34 @@ exports.slackLogin = function (Kirbi) {
 	console.log(chalk.magenta(`Slack Enabled... Starting.`));
 	if (Kirbi.Auth.slack.bot_token) {
 		console.log('Logging in to Slack...');
-		let MemoryDataStore = require('@slack/client').MemoryDataStore;
-        Kirbi.Slack = new RtmClient(Kirbi.Auth.slack.bot_token, {
+		const MemoryDataStore = require('@slack/client').MemoryDataStore;
+		Kirbi.Slack = new RtmClient(Kirbi.Auth.slack.bot_token, {
 			logLevel: 'error',
 			dataStore: new MemoryDataStore()
 		});
 		Kirbi.Slack.c_events = require('@slack/client').CLIENT_EVENTS;
 		Kirbi.Slack.rtm_events = require('@slack/client').RTM_EVENTS;
-        Kirbi.Slack.start();
+		Kirbi.Slack.start();
 		require('./lib/onEvent')(Kirbi);
 	} else {
-        console.log(chalk.red('ERROR: Kirbi must have a Slack bot token...'));
-        return;
-	};
+		console.log(chalk.red('ERROR: Kirbi must have a Slack bot token...'));
+		return;
+	}
 
-	//Load external slack-specific modules
-	if (Kirbi.Config.slack.modules.length && Kirbi.Config.slack.modules instanceof Array) {
+	// Load external slack-specific modules
+	if (Kirbi.Config.slack.modules.length > 0 && Array.isArray(Kirbi.Config.slack.modules)) {
 		Kirbi.slackCommands = {};
 		Kirbi.Config.slack.modules.forEach(module => {
-			if (Kirbi.slackCommands[module]) {return};
+			if (Kirbi.slackCommands[module]) {
+				return;
+			}
 			try {
 				module = require(`kirbi-slack-${module}`)(Kirbi);
 			} catch (err) {
 				console.log(chalk.red(`Improper setup of the 'slack-${module}' command file. : ${err}`));
 				return;
 			}
-			if (module && module['commands']) {
+			if (module && module.commands) {
 				module.commands.forEach(command => {
 					if (command in module) {
 						try {

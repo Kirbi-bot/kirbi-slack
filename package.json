@@ -1,34 +1,44 @@
 {
-	"name": "kirbi-slack",
-	"description": "adds Slack support to Kirbi",
-	"version": "0.1.0",
-	"license": "Apache-2.0",
-	"readme": "README.md",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Richardson-Media-House/kirbi-slack.git"
-	},
-	"author": "Nate Richardson <hello@naterichardson.com> (https://naterichardson.com)",
-	"contributors": [
-		"Matt Carroll <admin@develogix.com> (https://develogix.com)",
-		"Joseph Moran III <joseph.moraniii@gmail.com> (https://josephmoran.co)"
-	],
- 	"main": "slackSupport.js",
-	"dependencies": {
-		"@slack/client": "^3.11.0"
- 	},
-	"devDependencies": {
-		"xo": "^0.18.2"
-	},
-	"xo": {
-		"rules": {
-			"linebreak-style": ["error", "windows"],
-			"no-prototype-builtins": "warn",
-			"radix": "warn",
-			"guard-for-in": "warn"
-		}
-	},
-	"scripts": {
-		"test": "xo"
-	}
+  "name": "kirbi-slack",
+  "description": "adds Slack support to Kirbi",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Richardson-Media-House/kirbi-slack.git"
+  },
+  "author": "Nate Richardson <hello@naterichardson.com> (https://naterichardson.com)",
+  "contributors": [
+    "Matt Carroll <admin@develogix.com> (https://develogix.com)",
+    "Joseph Moran III <joseph.moraniii@gmail.com> (https://josephmoran.co)"
+  ],
+  "main": "slackSupport.js",
+  "dependencies": {
+    "@slack/client": "^3.11.0",
+    "chalk": "^2.1.0",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "plugins": ["unicorn"],
+    "rules": {
+      "linebreak-style": [
+        "error",
+        "windows"
+      ],
+      "no-prototype-builtins": "warn",
+      "radix": "warn",
+      "guard-for-in": "warn",
+      "import/no-unresolved": "off",
+      "camelcase": "off",
+      "no-negated-condition": "warn",
+      "unicorn/filename-case": ["error", { "case": "camelCase" }]
+    }
+  },
+  "scripts": {
+    "test": "xo"
+  }
 }
