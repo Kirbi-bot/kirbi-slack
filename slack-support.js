@@ -2,7 +2,6 @@ const chalk = require('chalk');
 
 exports.slackLogin = function (Kirbi) {
 	const RtmClient = require('@slack/client').RtmClient;
-	let commandCount = Object.keys(Kirbi.Commands).length;
 
 	console.log(chalk.magenta(`Slack Enabled... Starting.`));
 	if (Kirbi.Auth.slack.bot_token) {
@@ -21,33 +20,36 @@ exports.slackLogin = function (Kirbi) {
 		return;
 	}
 
-	// Load external slack-specific modules
-	if (Kirbi.Config.slack.modules.length > 0 && Array.isArray(Kirbi.Config.slack.modules)) {
-		Kirbi.slackCommands = {};
-		Kirbi.Config.slack.modules.forEach(module => {
-			if (Kirbi.slackCommands[module]) {
-				return;
-			}
-			try {
-				module = require(`kirbi-slack-${module}`)(Kirbi);
-			} catch (err) {
-				console.log(chalk.red(`Improper setup of the 'slack-${module}' command file. : ${err}`));
-				return;
-			}
-			if (module && module.commands) {
-				module.commands.forEach(command => {
-					if (command in module) {
-						try {
-							Kirbi.slackCommands[command] = module[command];
-						} catch (err) {
-							console.log(err);
+	Kirbi.setupSlackCommands = function () {
+		// Load external slack-specific modules
+		if (Kirbi.Config.slack.modules.length > 0 && Array.isArray(Kirbi.Config.slack.modules)) {
+			Kirbi.slackCommands = {};
+			Kirbi.Config.slack.modules.forEach(module => {
+				if (Kirbi.slackCommands[module]) {
+					return;
+				}
+				try {
+					module = require(`kirbi-slack-${module}`)(Kirbi);
+				} catch (err) {
+					console.log(chalk.red(`Improper setup of the 'slack-${module}' command file. : ${err}`));
+					return;
+				}
+				if (module && module.commands) {
+					module.commands.forEach(command => {
+						if (command in module) {
+							try {
+								Kirbi.slackCommands[command] = module[command];
+							} catch (err) {
+								console.log(err);
+							}
 						}
-					}
-				});
-			}
-		});
-		commandCount += Object.keys(Kirbi.slackCommands).length;
-	}
+					});
+				}
+			});
+		}
+	};
+	Kirbi.setupSlackCommands();
 
-	console.log(`Loaded ${commandCount} Slack chat commands`);
+	console.log(`Loaded ${Kirbi.commandCount()} base commands`);
+	console.log(`Loaded ${Object.keys(Kirbi.slackCommands).length} Slack commands`);
 };
