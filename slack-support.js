@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-exports.slackLogin = function (Kirbi) {
+exports.slackLogin = Kirbi => {
 	const RtmClient = require('@slack/client').RtmClient;
 
 	console.log(chalk.magenta(`Slack Enabled... Starting.`));
@@ -20,7 +20,7 @@ exports.slackLogin = function (Kirbi) {
 		return;
 	}
 
-	Kirbi.setupSlackCommands = function () {
+	Kirbi.setupSlackCommands = () => {
 		// Load external slack-specific modules
 		if (Kirbi.Config.slack.modules.length > 0 && Array.isArray(Kirbi.Config.slack.modules)) {
 			Kirbi.slackCommands = {};
